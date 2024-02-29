@@ -2,31 +2,24 @@ package com.bawp.todoister;
 
 import android.os.Bundle;
 
+import com.bawp.todoister.adapter.OnTodoClickListener;
 import com.bawp.todoister.adapter.RecycleViewAdapter;
 import com.bawp.todoister.model.Task;
 import com.bawp.todoister.model.TaskViewModel;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.View;
-
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.Calendar;
-import java.util.List;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnTodoClickListener {
     private TaskViewModel taskViewModel;
     private RecyclerView recyclerView;
     private RecycleViewAdapter recycleViewAdapter;
@@ -51,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         taskViewModel = new ViewModelProvider.AndroidViewModelFactory(
                 MainActivity.this.getApplication()).create(TaskViewModel.class);
         taskViewModel.getAllTasks().observe(this, tasks -> {
-            recycleViewAdapter = new RecycleViewAdapter(tasks);
+            recycleViewAdapter = new RecycleViewAdapter(tasks, this::onTodoClick);
             recyclerView.setAdapter(recycleViewAdapter);
         });
 
@@ -90,5 +83,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onTodoClick(int adapterPosition, Task task) {
+
     }
 }
